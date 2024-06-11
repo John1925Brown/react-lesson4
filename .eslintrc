@@ -70,7 +70,6 @@
     "object-shorthand": ["error", "always"],
     "prefer-arrow-callback": ["error"],
     "prefer-numeric-literals": ["error"],
-    "template-curly-spacing": ["error", "never"],
     //!-google
     "no-cond-assign": "off",
     "no-irregular-whitespace": "error",
@@ -154,7 +153,6 @@
     "no-new-object": "error",
     "no-tabs": "error",
     "no-trailing-spaces": "error",
-    "object-curly-spacing": "error",
     "one-var": [
       "error",
       {
