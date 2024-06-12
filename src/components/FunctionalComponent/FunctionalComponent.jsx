@@ -1,5 +1,5 @@
 // eslint-disable-next-line object-curly-spacing
-import { useState } from 'react';
+import { useState, useMemo, useLayoutEffect } from 'react';
 import style from './FunctionalComponent.module.css';
 import PropTypes from 'prop-types';
 
@@ -8,14 +8,26 @@ export const FunctionalComponent = ({ min, max }) => {
   const [userNumber, setUserNumber] = useState('');
   const [result, setResult] = useState('result');
   const [count, setCount] = useState(0);
-  const [randomNumber] = useState(
-    Math.floor(Math.random() * (max - min + 1)) + min
-  );
+  const [tempRandom, setTempRandom] = useState(0);
+
+  const [finish, setFinish] = useState(false);
+
+  const randomNumber = useMemo(() => {
+    setFinish(false);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }, [finish]);
+
+  useLayoutEffect(() => {
+    if (tempRandom >= 1) {
+      setTempRandom(Math.random());
+    }
+  }, [tempRandom]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setCount((prevCount) => prevCount + 1);
+    setTempRandom(1);
 
     setResult(() => {
       if (!userNumber || userNumber < min || userNumber > max) {
@@ -30,6 +42,8 @@ export const FunctionalComponent = ({ min, max }) => {
         return `${userNumber} больше загаданного числа`;
       }
 
+      setFinish(true);
+
       return `Вы угадали, число ${randomNumber}`;
     });
   };
@@ -38,9 +52,12 @@ export const FunctionalComponent = ({ min, max }) => {
     setUserNumber(e.target.value);
   };
 
+  console.log(randomNumber);
+
   return (
     <div className={style.game}>
       <p className={style.result}>{result}</p>
+      <p className={style.result}>{tempRandom}</p>
       <form className={style.form} onSubmit={handleSubmit}>
         <label className={style.label} htmlFor="user_number">
           Попыток: {count}
